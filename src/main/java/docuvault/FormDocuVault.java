@@ -15,6 +15,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 
 /**
  *
@@ -25,11 +27,12 @@ public class FormDocuVault extends javax.swing.JFrame {
     /**
      * Creates new form FormDocuVault
      */
-    private final DokumenManager manager = new DokumenManager();
+    private final DokumenManager manager;
     private DefaultTableModel model;
     private int idTerpilih = -1;   // ID dokumen yang sedang dipilih di tabel
 
-    public FormDocuVault() {
+        public FormDocuVault(DokumenManager manager) {
+        this.manager = manager;
         initComponents();
         setLocationRelativeTo(null);   // jendela muncul di tengah layar
         siapkanForm();
@@ -512,12 +515,10 @@ public class FormDocuVault extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FormDocuVault().setVisible(true);
-            }
-        });
+        /* Mulai Spring, lalu tampilkan form */
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+        DokumenManager manager = ctx.getBean(DokumenManager.class);
+        java.awt.EventQueue.invokeLater(() -> new FormDocuVault(manager).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
